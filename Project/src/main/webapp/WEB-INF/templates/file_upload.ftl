@@ -25,7 +25,7 @@
                 contentType: false
             })
                 .done(function () {
-                    alert("link was sent to your email :)")
+                    alert("Check email! ")
                 })
                 .fail(function () {
                     alert('Error')
@@ -43,11 +43,9 @@
     <div class="filename"></div>
 </div>
 
-<#if status??>
-    ${status}
+<#if check??>
+    ${check}
 </#if>
-<#if image??>
-    <img src="${image}">
-</#if>
+
 </body>
 </html>

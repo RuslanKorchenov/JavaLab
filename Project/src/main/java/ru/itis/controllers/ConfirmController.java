@@ -10,6 +10,7 @@ import ru.itis.repositories.UsersRepository;
 import ru.itis.services.interfaces.SignUpService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -20,8 +21,9 @@ public class ConfirmController {
     @GetMapping("/confirm/{code}")
     public String confirm(@PathVariable String code, HttpServletRequest request) {
         Optional<UserDto> userDto = signUpService.confirm(code);
+        HttpSession session = request.getSession();
         if (userDto.isPresent()) {
-            request.setAttribute("user", userDto.get());
+            session.setAttribute("user", userDto.get());
             return "redirect:/files";
         } else {
             return "signUp";

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import ru.itis.dto.UserDto;
 import ru.itis.models.FileInfo;
+import ru.itis.models.User;
 import ru.itis.services.interfaces.EmailService;
 import ru.itis.services.interfaces.FileService;
 

@@ -30,7 +30,7 @@ public class FileServiceImpl implements FileService {
 
     @SneakyThrows
     @Override
-    public String saveFile(MultipartFile file, UserDto userDto) {
+    public FileInfo saveFile(MultipartFile file, UserDto userDto) {
         String storageName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
         FileInfo fileInfo = FileInfo.builder()
                 .originalFileName(file.getOriginalFilename())
@@ -42,7 +42,7 @@ public class FileServiceImpl implements FileService {
                 .build();
         filesRepository.save(fileInfo);
         Files.copy(file.getInputStream(), Paths.get(path, storageName));
-        return fileInfo.getStorageFileName();
+        return fileInfo;
     }
 
     @SneakyThrows

@@ -20,14 +20,14 @@ public class FilesRepositoryImpl implements FilesRepository {
     private static final String SQL_SELECT_ALL = "select * from file_info";
     private static final String SQL_INSERT = "insert into file_info(storage_fileName, original_fileName, size, type, url) values (?, ?, ?, ?, ?)";
     private static final String SQL_DELETE = "DELETE FROM file_info WHERE id = ?";
-    private static final String SQL_SELECT_BY_STORAGE_NAME = "SELECT * FROM file_info WHERE storage_name = ?";
+    private static final String SQL_SELECT_BY_STORAGE_NAME = "SELECT * FROM file_info WHERE storage_filename = ?";
     private static final String SQL_SELECT_BY_ID = "select * from file_info where id = ?";
 
     private RowMapper<FileInfo> fileInfoRowMapper = (row, rowNumber) ->
             FileInfo.builder()
                     .id(row.getLong("id"))
-                    .storageFileName(row.getString("storageFileName"))
-                    .originalFileName(row.getString("originalFileName"))
+                    .storageFileName(row.getString("storage_filename"))
+                    .originalFileName(row.getString("original_filename"))
                     .size(row.getLong("size"))
                     .type(row.getString("type"))
                     .url(row.getString("url"))
@@ -59,8 +59,8 @@ public class FilesRepositoryImpl implements FilesRepository {
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection
                     .prepareStatement(SQL_INSERT);
-            statement.setString(1, entity.getOriginalFileName());
-            statement.setString(2, entity.getStorageFileName());
+            statement.setString(1, entity.getStorageFileName());
+            statement.setString(2, entity.getOriginalFileName());
             statement.setLong(3, entity.getSize());
             statement.setString(4, entity.getType());
             statement.setString(5, entity.getUrl());

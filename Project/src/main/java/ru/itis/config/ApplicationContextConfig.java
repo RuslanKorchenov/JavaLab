@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 
 @Configuration
 @ComponentScan(basePackages = "ru.itis")
+@EnableAspectJAutoProxy
 @PropertySource("classpath:application.properties")
 public class ApplicationContextConfig {
 
@@ -87,10 +88,11 @@ public class ApplicationContextConfig {
     public ExecutorService executorService() {
         return Executors.newFixedThreadPool(20);
     }
+
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(100000);
+        multipartResolver.setMaxUploadSize(1000000);
         return multipartResolver;
     }
 }
