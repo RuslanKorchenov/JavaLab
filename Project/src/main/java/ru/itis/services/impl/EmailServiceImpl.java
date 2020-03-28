@@ -25,25 +25,21 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    @Autowired
-    private Configuration freemarkerConfig;
-
     @Value("testinfo303@gmail.com")
     private String userName;
 
     @Override
     public void sendMail(String subject, String text, String email) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            Map<String, String> map = new HashMap<>();
-            String link = "http://localhost:8080/confirm?code=" + text;
-            map.put("code", link);
-            Template t = freemarkerConfig.getTemplate("email.ftl");
-            String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, map);
-            messageHelper.setFrom(userName);
-            messageHelper.setTo(email);
-            messageHelper.setSubject(subject);
-            messageHelper.setText(html, true);
+            try {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+                messageHelper.setFrom(userName);
+                messageHelper.setTo(email);
+                messageHelper.setSubject(subject);
+                messageHelper.setText(text, true);
+            } catch (javax.mail.MessagingException e) {
+                throw new IllegalArgumentException(e);
+            }
         };
         emailSender.send(messagePreparator);
     }

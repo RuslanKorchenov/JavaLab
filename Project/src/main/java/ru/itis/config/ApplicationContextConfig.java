@@ -2,12 +2,13 @@ package ru.itis.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -15,17 +16,25 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = "ru.itis")
+@PropertySource("classpath:application.properties")
 public class ApplicationContextConfig {
 
     @Autowired
@@ -74,22 +83,14 @@ public class ApplicationContextConfig {
         return mailSender;
     }
 
-//    @Bean
-//    public FreeMarkerConfigurationFactoryBean getFreeMarkerConfiguration() {
-//        FreeMarkerConfigurationFactoryBean fmConfigFactoryBean = new FreeMarkerConfigurationFactoryBean();
-//        fmConfigFactoryBean.setTemplateLoaderPath("/templates/");
-//        return fmConfigFactoryBean;
-//    }
-
-    @Bean
-    public freemarker.template.Configuration freemarkerConfig(){
-        freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_22);
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        return cfg;
-    }
     @Bean
     public ExecutorService executorService() {
         return Executors.newFixedThreadPool(20);
     }
-
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(100000);
+        return multipartResolver;
+    }
 }
