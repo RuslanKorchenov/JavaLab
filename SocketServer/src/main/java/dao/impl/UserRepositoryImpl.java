@@ -59,10 +59,10 @@ public class UserRepositoryImpl implements UserRepository {
     };
 
     public Optional<User> login(String login, String password) {
-            User user = jdbcTemplate.queryForObject(SQL_SELECT_LOGIN, new Object[]{login, password}, userRowMapper);
-            if (encoder.matches(password, user.getAuthData().getPassword()))
-                return Optional.ofNullable(user);
-            return Optional.empty();
+        User user = jdbcTemplate.queryForObject(SQL_SELECT_LOGIN, new Object[]{login, password}, userRowMapper);
+        if (encoder.matches(password, user.getAuthData().getPassword()))
+            return Optional.ofNullable(user);
+        return Optional.empty();
     }
 
 
