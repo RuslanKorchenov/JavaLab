@@ -16,4 +16,6 @@ public class User {
     String password;
     State state;
     String confirmCode;
+
+    Role role;
 }

@@ -1,5 +1,6 @@
 package ru.itis.repositories;
 
+import com.sun.rowset.internal.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.itis.models.Role;
 import ru.itis.models.State;
 import ru.itis.models.User;
 
@@ -20,20 +22,35 @@ public class UsersRepositoryImpl implements UsersRepository {
     private static final String SQL_SELECT_LOGIN = "SELECT * FROM users WHERE email = ?";
     private static final String SQL_SELECT_BY_ID = "select * from users where id = ?";
     private static final String SQL_SELECT_ALL = "select * from users";
-    private static final String SQL_INSERT = "insert into users(username, email, password, state, confirm_code) values (?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT = "insert into users(username, email, password, state, confirm_code, role) values (?, ?, ?, ?, ?, ?)";
     private static final String SQL_DELETE = "DELETE FROM users WHERE id = ?";
     private static final String SQL_UPDATE = "UPDATE users SET state = ? WHERE email = ?";
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<User> userRowMapper = (row, rowNumber) ->
-            User.builder()
-                    .username(row.getString("username"))
-                    .id(row.getLong("id"))
-                    .email(row.getString("email"))
-                    .password(row.getString("password"))
-                    .confirmCode(row.getString("confirm_code"))
-                    .build();
+    private RowMapper<User> userRowMapper = (row, rowNumber) -> {
+        Role role;
+        String strRole = row.getString("role");
+        if(strRole.equals("ADMIN"))
+            role = Role.ADMIN;
+        else
+            role = Role.USER;
+        State state;
+        String strState = row.getString("state");
+        if(strState.equals("CONFIRMED"))
+            state = State.CONFIRMED;
+        else
+            state = State.NOT_CONFIRMED;
+        return User.builder()
+                .username(row.getString("username"))
+                .id(row.getLong("id"))
+                .email(row.getString("email"))
+                .password(row.getString("password"))
+                .confirmCode(row.getString("confirm_code"))
+                .state(state)
+                .role(role)
+                .build();
+    };
 
     @Override
     public Optional<User> findByConfirmCode(String code) {
@@ -87,6 +104,7 @@ public class UsersRepositoryImpl implements UsersRepository {
             statement.setString(3, entity.getPassword());
             statement.setString(4, entity.getState().toString());
             statement.setString(5, entity.getConfirmCode());
+            statement.setString(6, Role.USER.toString());
             return statement;
         }, keyHolder);
 

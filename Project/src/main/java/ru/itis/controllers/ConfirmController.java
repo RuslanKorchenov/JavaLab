@@ -21,10 +21,8 @@ public class ConfirmController {
     @GetMapping("/confirm/{code}")
     public String confirm(@PathVariable String code, HttpServletRequest request) {
         Optional<UserDto> userDto = signUpService.confirm(code);
-        HttpSession session = request.getSession();
         if (userDto.isPresent()) {
-            session.setAttribute("user", userDto.get());
-            return "redirect:/files";
+            return "redirect:/signIn";
         } else {
             return "signUp";
         }

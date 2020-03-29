@@ -1,6 +1,7 @@
 package ru.itis.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.itis.dto.UserDto;
 import ru.itis.models.FileInfo;
 import ru.itis.models.User;
+import ru.itis.security.UserDetailsImpl;
 import ru.itis.services.interfaces.EmailService;
 import ru.itis.services.interfaces.FileService;
 
@@ -27,9 +29,10 @@ public class FilesController {
     }
 
     @PostMapping(value = "/files")
-    public ModelAndView uploadFile(@RequestParam("file") MultipartFile multipartFile, HttpSession session) {
-        UserDto userDto = (UserDto) session.getAttribute("user");
-        fileService.saveFile(multipartFile, userDto);
+    public ModelAndView uploadFile(@RequestParam("file") MultipartFile multipartFile, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
+        fileService.saveFile(multipartFile, user.getId());
         ModelAndView model = new ModelAndView();
         model.addObject("check", "file uploaded");
         model.setViewName("file_upload");

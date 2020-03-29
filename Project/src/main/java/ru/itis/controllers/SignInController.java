@@ -6,21 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ru.itis.dto.SignInDto;
+import ru.itis.dto.UserDto;
 import ru.itis.services.interfaces.SignInService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
 public class SignInController {
-
-
-
-
-    //ОН ТУТ ПРОСТО ТАК, ЕЩЕ НЕ РЕАЛИЗОВАН!!!
-
-
 
     @Autowired
     private SignInService signInService;
@@ -33,15 +29,13 @@ public class SignInController {
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public ModelAndView signIn(SignInDto signInDto, HttpServletResponse response) {
-        Optional<String> cookieCandidate = signInService.signIn(signInDto);
+    public ModelAndView signIn(SignInDto signInDto, HttpServletRequest request) {
+        Optional<UserDto> userDto = signInService.signIn(signInDto);
         ModelAndView modelAndView = new ModelAndView();
-        if (cookieCandidate.isPresent()) {
-            Cookie cookie = new Cookie("AUTH", cookieCandidate.get());
-            response.addCookie(cookie);
+        if (userDto.isPresent()) {
             modelAndView.setViewName("file_upload");
         } else {
-            //TODO: send some error to signIn.ftl
+            modelAndView.addObject("status", "Some troubles with Email/Pass.");
             modelAndView.setViewName("signIn");
         }
         return modelAndView;
