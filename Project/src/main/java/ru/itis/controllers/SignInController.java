@@ -9,10 +9,7 @@ import ru.itis.dto.SignInDto;
 import ru.itis.dto.UserDto;
 import ru.itis.services.interfaces.SignInService;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -29,7 +26,7 @@ public class SignInController {
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public ModelAndView signIn(SignInDto signInDto, HttpServletRequest request) {
+    public ModelAndView signIn(SignInDto signInDto) {
         Optional<UserDto> userDto = signInService.signIn(signInDto);
         ModelAndView modelAndView = new ModelAndView();
         if (userDto.isPresent()) {

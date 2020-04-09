@@ -5,12 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.itis.dto.UserDto;
-import ru.itis.models.User;
-import ru.itis.repositories.UsersRepository;
 import ru.itis.services.interfaces.SignUpService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller

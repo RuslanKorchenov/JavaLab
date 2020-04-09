@@ -1,7 +1,7 @@
 package ru.itis.repositories;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import ru.itis.models.User;
+import ru.itis.repositories.CrudRepository;
 
 import java.util.Optional;
 

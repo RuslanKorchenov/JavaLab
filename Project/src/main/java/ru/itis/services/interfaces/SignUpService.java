@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface SignUpService {
-    void signUp(SignUpDto form) throws IOException, TemplateException;
+    boolean signUp(SignUpDto form) throws IOException, TemplateException;
     Optional<UserDto> confirm(String code);
 
 }

@@ -1,10 +1,9 @@
 package ru.itis.services.impl;
 
-import freemarker.template.TemplateException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.itis.dto.SignUpDto;
 import ru.itis.dto.UserDto;
@@ -17,7 +16,6 @@ import ru.itis.services.interfaces.EmailService;
 import ru.itis.services.interfaces.MessageConvertorService;
 import ru.itis.services.interfaces.SignUpService;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -42,7 +40,9 @@ public class SignUpServiceImpl implements SignUpService {
 
     @SneakyThrows
     @Override
-    public void signUp(SignUpDto form) {
+    public boolean signUp(SignUpDto form) {
+        if(usersRepository.findByEmail(form.getEmail()).isPresent())
+            return false;
         User user = User.builder()
                 .email(form.getEmail())
                 .password(passwordEncoder.encode(form.getPassword()))
@@ -53,12 +53,12 @@ public class SignUpServiceImpl implements SignUpService {
 
         String text = messageConvertorService.fromEmailToFtl(user.getConfirmCode());
 
-
+        usersRepository.save(user);
         threadPool.submit(() -> {
             emailService.sendMail("Регистрация", text,
                     user.getEmail());
         });
-        usersRepository.save(user);
+        return true;
     }
 
     @Override

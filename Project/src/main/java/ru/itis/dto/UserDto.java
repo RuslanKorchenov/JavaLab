@@ -18,7 +18,6 @@ public class UserDto {
     private String username;
     private String email;
 
-
     public static UserDto from(User user) {
         return UserDto.builder()
                 .email(user.getEmail())

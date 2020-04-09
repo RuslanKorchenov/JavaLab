@@ -1,0 +1,25 @@
+POST http://localhost:8080/rest/signUp
+Content-Type: application/json
+
+{
+  "email": "ruselkomp2@gmail.com",
+  "username": "tester the bester",
+  "password": "1234"
+}
+
+###
+
+POST http://localhost:8080/rest/signIn
+Content-Type: application/json
+
+{
+  "email": "ruselkomp2@gmail.com",
+  "password": "1234"
+}
+
+###
+
+GET http://localhost:8080/rest/profile
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJydXNlbGtvbXAyQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoidGVzdGVyIHRoZSBiZXN0ZXIifQ.TiCxfktpJ5CFk4uN6YeSCwf_xPQ67udi5SMwGyaOvqs
+
+###

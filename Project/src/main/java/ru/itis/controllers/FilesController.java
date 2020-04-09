@@ -6,15 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import ru.itis.dto.UserDto;
-import ru.itis.models.FileInfo;
 import ru.itis.models.User;
-import ru.itis.security.UserDetailsImpl;
-import ru.itis.services.interfaces.EmailService;
+import ru.itis.security.jwt.details.UserDetailsImpl;
 import ru.itis.services.interfaces.FileService;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class FilesController {

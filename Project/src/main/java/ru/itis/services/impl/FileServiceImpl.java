@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import ru.itis.dto.UserDto;
 import ru.itis.models.FileInfo;
 import ru.itis.repositories.FilesRepository;
+import ru.itis.repositories.UsersRepository;
 import ru.itis.services.interfaces.FileService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +23,9 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
     @Autowired
     private FilesRepository filesRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     @Value("${storage.path}")
     private String path;
@@ -38,7 +40,7 @@ public class FileServiceImpl implements FileService {
                 .storageFileName(storageName)
                 .size(file.getSize())
                 .url(path + storageName)
-                .userId(id)
+                .user(usersRepository.find(id).get())
                 .build();
         filesRepository.save(fileInfo);
         Files.copy(file.getInputStream(), Paths.get(path, storageName));
