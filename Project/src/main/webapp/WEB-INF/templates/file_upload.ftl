@@ -1,3 +1,4 @@
+<#import "spring.ftl" as spring />
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,9 +36,9 @@
 </head>
 <body>
 <div>
-    <input type="file" id="file" name="file" placeholder="File name"/>
+    <input type="file" id="file" name="file" placeholder="<@spring.message 'confirm.confirm'/>"/>
     <button onclick="sendFile()">
-        Upload file
+        <@spring.message 'files.upload.upload'/>
     </button>
     <input type="hidden" id="file_hidden">
     <div class="filename"></div>

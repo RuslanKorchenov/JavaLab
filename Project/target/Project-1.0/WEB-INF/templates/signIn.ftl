@@ -1,4 +1,5 @@
 <#import "header.ftl" as c/>
+<#import "spring.ftl" as spring />
 <@c.page title="Sign In">
 
     <div class="main">
@@ -6,20 +7,20 @@
             <div class="container">
                 <div class="signin-content">
                     <div class="signin-form">
-                        <h2 class="form-title">Sign in</h2>
+                        <h2 class="form-title"><@spring.message 'form.sign.in'/></h2>
                         <form method="POST" class="register-form" id="login-form">
                             <#if status??>
                                 ${status}
                             </#if>
                             <div class="form-group">
                                 <label for="email"></label>
-                                <input type="email" name="email" id="email" placeholder="Your Email"/>
+                                <input type="email" name="email" id="email" placeholder="<@spring.message 'form.email'/>"/>
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password" id="password" placeholder="Password"/>
+                                <input type="password" name="password" id="password" placeholder="<@spring.message 'form.password'/>"/>
                             </div>
                             <div class="form-group form-button">
-                                <input type="submit" name="signIn" id="signIn" class="form-submit" value="Log in"/>
+                                <input type="submit" name="signIn" id="signIn" class="form-submit" value="<@spring.message 'form.sign.in.button'/>"/>
                             </div>
                         </form>
                     </div>

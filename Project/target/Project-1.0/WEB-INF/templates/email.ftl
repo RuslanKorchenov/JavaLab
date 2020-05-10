@@ -1,4 +1,4 @@
-<div style="color: black">Hello!
-Click for confirm!
-<a href=${code}>Confirm</a>
+<#import "spring.ftl" as spring />
+<div style="color: black"><@spring.message 'confirm.text'/>
+<a href=${code}><@spring.message 'confirm.confirm'/></a>
 </div>
