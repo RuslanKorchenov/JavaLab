@@ -28,6 +28,7 @@
                             <div class="form-group form-button">
                                 <input type="submit" name="signup" id="signup" class="form-submit" value="<@spring.message 'form.sign.up.button'/>"/>
                             </div>
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         </form>
                     </div>
                 </div>

@@ -12,15 +12,25 @@
                             <#if status??>
                                 ${status}
                             </#if>
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <div class="form-group">
                                 <label for="email"></label>
-                                <input type="email" name="email" id="email" placeholder="<@spring.message 'form.email'/>"/>
+                                <input type="email" name="email" id="email"
+                                       placeholder="<@spring.message 'form.email'/>"/>
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password" id="password" placeholder="<@spring.message 'form.password'/>"/>
+                                <input type="password" name="password" id="password"
+                                       placeholder="<@spring.message 'form.password'/>"/>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox"
+                                           name="remember-me"><@spring.message 'form.remember.me'/>
+                                </label>
                             </div>
                             <div class="form-group form-button">
-                                <input type="submit" name="signIn" id="signIn" class="form-submit" value="<@spring.message 'form.sign.in.button'/>"/>
+                                <input type="submit" name="signIn" id="signIn" class="form-submit"
+                                       value="<@spring.message 'form.sign.in.button'/>"/>
                             </div>
                         </form>
                     </div>

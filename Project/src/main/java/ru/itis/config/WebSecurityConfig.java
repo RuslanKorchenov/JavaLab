@@ -15,8 +15,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.web.filter.GenericFilterBean;
+
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             http.antMatcher("/rest/**");
 
-            http.csrf().disable();
             http.formLogin().disable();
             http.logout().disable();
 
@@ -72,6 +75,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private PasswordEncoder passwordEncoder;
 
+        @Autowired
+        private PersistentTokenRepository persistentTokenRepository;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -79,7 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.csrf().disable();
 
             http.authorizeRequests()
                     .antMatchers("/signIn", "/signUp", "/confirm", "/")
@@ -92,6 +97,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/files")
                     .failureUrl("/signIn")
                     .permitAll();
+
+            http.rememberMe().rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository);
+
+            http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/signIn")
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .invalidateHttpSession(true);
         }
     }
 }
