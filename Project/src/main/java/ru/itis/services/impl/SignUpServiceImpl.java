@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutorService;
 public class SignUpServiceImpl implements SignUpService {
 
     @Autowired
+    @Qualifier("jpaUsersRepository")
     private UsersRepository usersRepository;
 
     @Autowired

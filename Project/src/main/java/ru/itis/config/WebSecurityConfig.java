@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
 
             http.antMatcher("/rest/**");
-
+//            http.csrf().disable();
             http.formLogin().disable();
             http.logout().disable();
 
@@ -89,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .antMatchers("/signIn", "/signUp", "/confirm", "/")
                     .permitAll()
-                    .antMatchers("/files", "/products/**")
+                    .antMatchers("/files", "/products/**", "/сhat")
                     .authenticated();
 
             http.formLogin().loginPage("/signIn")

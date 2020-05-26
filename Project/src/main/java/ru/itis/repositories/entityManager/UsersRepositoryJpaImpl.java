@@ -69,7 +69,7 @@ public class UsersRepositoryJpaImpl implements UsersRepository {
     @Override
     @Transactional
     public void save(User user) {
-        entityManagerFactory.merge(user);
+        entityManagerFactory.persist(user);
     }
 
     @Override
